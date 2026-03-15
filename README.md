@@ -13,7 +13,7 @@ This project deploys a self-hosted music streaming server using Navidrome inside
 
 ## Architecture
 Phone → Tailscale → Proxmox Host → LXC Container → Docker → Navidrome
-Personal PC → Samba → Proxmox Host → Navidrome
+| Personal PC → Samba → Proxmox Host → Navidrome
 
 ## Features
 - Self-hosted music streaming
