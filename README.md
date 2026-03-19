@@ -29,7 +29,7 @@ Phone → Tailscale → Proxmox Host → LXC Container → Docker → Navidrome
 
 The data flow follows this path:
 
-```mermaid
+```bash
 
 graph TD
     A[Internet] -->|Tailscale Tunnel| B(Proxmox Host)
