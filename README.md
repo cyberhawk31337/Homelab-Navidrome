@@ -36,11 +36,11 @@ graph TD
     F[Mobile Device] -->|Tailscale| B
     G[Personal PC] -->|Samba| B
     
-style A fill:#f5f5f5,stroke:#333
-    style B fill:#e3e8ee,stroke:#333
-    style C fill:#e8f0e8,stroke:#333
-    style D fill:#fff8e8,stroke:#333
-    style E fill:#fce8e8,stroke:#333
+  style A fill:#333,stroke:#666,color:#fff
+    style B fill:#456,stroke:#666,color:#fff
+    style C fill:#363,stroke:#666,color:#fff
+    style D fill:#653,stroke:#666,color:#fff
+    style E fill:#633,stroke:#666,color:#fff
 ```
 ## Features
 - Self-hosted music streaming
