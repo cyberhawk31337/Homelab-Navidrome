@@ -19,3 +19,9 @@ Phone → Tailscale → Proxmox Host → LXC Container → Docker → Navidrome
 - Self-hosted music streaming
 - Secure remote access
 - Containerized deployment
+
+
+
+
+## The Setup
+- 
