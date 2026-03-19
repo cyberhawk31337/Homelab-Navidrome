@@ -33,9 +33,10 @@ The data flow follows this path:
 
 Internet → Tailscale Tunnel → Proxmox Host → LXC Container → Docker → Navidrome ↓ Samba Share (/mnt/music)
     
-**Data Flow:**
-1. **Mobile Device** → Tailscale → Proxmox Host → LXC Container → Navidrome (streaming)
-2. **Personal PC** → Samba → Proxmox Host → `/mnt/music` → Navidrome (file upload)
+Data Flow:
+
+Mobile Device → Tailscale → Proxmox Host → LXC Container → Navidrome (streaming)
+Personal PC → Samba → Proxmox Host → /mnt/music → Navidrome (file upload)
 
 ## Features
 - Self-hosted music streaming
