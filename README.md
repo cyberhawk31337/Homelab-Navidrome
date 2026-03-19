@@ -6,12 +6,12 @@ Self-hosted music server using Navidrome on Docker in a Proxmox LXC container wi
 ![Status](https://img.shields.io/badge/Status-Incomplete-red)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 ![Last Updated](https://img.shields.io/badge/Last%20Updated-Mar%202026-orange)
-
 ---
-
 ## Overview
-This project deploys a self-hosted music streaming server using Navidrome inside a Docker container running in an LXC container on Proxmox.
+This project documents the deployment of a self-hosted music streaming server using **Navidrome** inside a **Docker** container running in an **LXC container** on **Proxmox VE**. The setup includes secure remote access via **Tailscale** and file sharing via **Samba**.
 
+This is not just a tutorial— it's a troubleshooting log that documents the challenges I faced and how I solved them.
+---
 ## Technologies
 - Proxmox VE
 - Docker
