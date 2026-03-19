@@ -31,20 +31,11 @@ The data flow follows this path:
 
 ```bash
 
-graph TD
-    A[Internet] -->|Tailscale Tunnel| B(Proxmox Host)
-    B -->|Port Forwarding| C[LXC Container]
-    C -->|Docker| D{Navidrome Service}
-    C -->|Bind Mount| E[Samba Share /mnt/music]
+Internet → Tailscale Tunnel → Proxmox Host → LXC Container → Docker → Navidrome ↓ Samba Share (/mnt/music)
     
-    F[Mobile Device] -->|Tailscale| B
-    G[Personal PC] -->|Samba| B
-    
-    style A fill:#ff99cc,stroke:#333
-    style B fill:#99ccff,stroke:#333
-    style C fill:#99ff99,stroke:#333
-    style D fill:#ffcc99,stroke:#333
-    style E fill:#ff9966,stroke:#333
+**Data Flow:**
+1. **Mobile Device** → Tailscale → Proxmox Host → LXC Container → Navidrome (streaming)
+2. **Personal PC** → Samba → Proxmox Host → `/mnt/music` → Navidrome (file upload)
 
 ## Features
 - Self-hosted music streaming
