@@ -26,15 +26,22 @@ This is not just a tutorial— it's a troubleshooting log that documents the cha
 ## 🏗️ Architecture
 The data flow follows this path:
 
-```bash
-
-Internet → Tailscale Tunnel → Proxmox Host → LXC Container → Docker → Navidrome ↓ Samba Share (/mnt/music)
+```mermaid
+graph TD
+    A[Internet] -->|Tailscale Tunnel| B(Proxmox Host)
+    B -->|Port Forwarding| C[LXC Container]
+    C -->|Docker| D{Navidrome Service}
+    C -->|Bind Mount| E[Samba Share /mnt/music]
     
-Data Flow:
-
-1. Mobile Device → Tailscale → Proxmox Host → LXC Container → Navidrome (streaming)
-2. Personal PC → Samba → Proxmox Host → /mnt/music → Navidrome (file upload)
-'''
+    F[Mobile Device] -->|Tailscale| B
+    G[Personal PC] -->|Samba| B
+    
+    style A fill:#f9f,stroke:#333
+    style B fill:#bbf,stroke:#333
+    style C fill:#bfb,stroke:#333
+    style D fill:#ff9,stroke:#333
+    style E fill:#f96,stroke:#333
+```
 ## Features
 - Self-hosted music streaming
 - Secure remote access
