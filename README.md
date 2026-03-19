@@ -43,12 +43,12 @@ graph TD
     style E fill:#633,stroke:#666,color:#fff
 ```
 ## ✨ Features
--✅ Self-hosted music streaming with Navidrome
--✅ Secure remote access via Tailscale (no port forwarding required)
--✅ Containerized deployment with Docker
--✅ Persistent storage via bind mounts
--✅ File transfer from Windows PC via Samba
--✅ Troubleshooting documentation for network isolation issues
+- Self-hosted music streaming with Navidrome
+- Secure remote access via Tailscale (no port forwarding required)
+- Containerized deployment with Docker
+- Persistent storage via bind mounts
+- File transfer from Windows PC via Samba
+- Troubleshooting documentation for network isolation issues
 
 ## The Setup
 - 
