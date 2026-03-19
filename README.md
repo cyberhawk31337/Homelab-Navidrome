@@ -24,9 +24,6 @@ This is not just a tutorial— it's a troubleshooting log that documents the cha
 | **OS** | Debian 12 | LXC container base system |
 ---
 ## 🏗️ Architecture
-Phone → Tailscale → Proxmox Host → LXC Container → Docker → Navidrome
-| Personal PC → Samba → Proxmox Host → Navidrome
-
 The data flow follows this path:
 
 ```bash
@@ -37,7 +34,7 @@ Data Flow:
 
 1. Mobile Device → Tailscale → Proxmox Host → LXC Container → Navidrome (streaming)
 2. Personal PC → Samba → Proxmox Host → /mnt/music → Navidrome (file upload)
-
+'''
 ## Features
 - Self-hosted music streaming
 - Secure remote access
