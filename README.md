@@ -27,7 +27,23 @@ This is not just a tutorial— it's a troubleshooting log that documents the cha
 Phone → Tailscale → Proxmox Host → LXC Container → Docker → Navidrome
 | Personal PC → Samba → Proxmox Host → Navidrome
 
-┌─────────────────────────────────────────────────────────────┐ │ Internet │ └─────────────────────────────────────────────────────────────┘ │ ▼ ┌─────────────────────────────────────────────────────────────┐ │ Tailscale Tunnel │ │ (Encrypted Mesh Network) │ └─────────────────────────────────────────────────────────────┘ │ ▼ ┌─────────────────────────────────────────────────────────────┐ │ Proxmox Host │ │ ┌──────────────────────────────────────────────────────┐ │ │ │ LXC Container (DockNavi) │ │ │ │ ┌────────────────────────────────────────────────┐ │ │ │ │ │ Docker │ │ │ │ │ │ ┌──────────────────────────────────────────┐ │ │ │ │ │ │ │ Navidrome │ │ │ │ │ │ │ │ (Port 4533:4533) │ │ │ │ │ │ │ └──────────────────────────────────────────┘ │ │ │ │ │ └────────────────────────────────────────────────┘ │ │ │ └──────────────────────────────────────────────────────┘ │ │ │ │ ┌──────────────────────────────────────────────────────┐ │ │ │ Samba Share │ │ │ │ (/mnt/music → /music) │ │ │ └──────────────────────────────────────────────────────┘ │ └─────────────────────────────────────────────────────────────┘ ▲ │ ┌───────┴───────┐ │ │ Personal PC Mobile Device (File Upload via) (Streaming via) Samba Tailscale
+The data flow follows this path:
+
+```mermaid
+graph TD
+    A[Internet] -->|Tailscale Tunnel| B(Proxmox Host)
+    B -->|Port Forwarding| C[LXC Container]
+    C -->|Docker| D{Navidrome Service}
+    C -->|Bind Mount| E[Samba Share /mnt/music]
+    
+    F[Mobile Device] -->|Tailscale| B
+    G[Personal PC] -->|Samba| B
+    
+    style A fill:#f9f,stroke:#333
+    style B fill:#bbf,stroke:#333
+    style C fill:#bfb,stroke:#333
+    style D fill:#ff9,stroke:#333
+    style E fill:#f96,stroke:#333
 
 ## Features
 - Self-hosted music streaming
