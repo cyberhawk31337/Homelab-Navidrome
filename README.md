@@ -43,9 +43,5 @@ Data Flow:
 - Secure remote access
 - Containerized deployment
 
-'''
-
-
-
 ## The Setup
 - 
