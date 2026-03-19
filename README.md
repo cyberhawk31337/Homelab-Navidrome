@@ -44,11 +44,52 @@ graph TD
 ```
 ## ✨ Features
 - Self-hosted music streaming with Navidrome
-- Secure remote access via Tailscale (no port forwarding required)
+- Secure remote access via Tailscale (Port Fowarding to LXC via port 4533)
 - Containerized deployment with Docker
 - Persistent storage via bind mounts
 - File transfer from Windows PC via Samba
 - Troubleshooting documentation for network isolation issues
 
-## The Setup
-- 
+## 📋 The Setup
+
+### 1. Infrastructure Provisioning (Proxmox VE)
+- Created a Debian 12 LXC container (`DockNavi`) with 3 vCPUs and 2GB RAM
+- Enabled **Nesting** in container features to allow Docker execution within LXC
+- Configured a **Bind Mount** (`mp0`) to map host directory `/mnt/music` to container path `/music`
+
+```bash
+# Proxmox Shell - Create music directory
+mkdir -p /mnt/music
+
+# Add bind mount to container config
+nano /etc/pve/lxc/100.conf
+# Add: mp0: /mnt/music,mp=/music
+```
+### 2. Container Orchestration (Docker)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
