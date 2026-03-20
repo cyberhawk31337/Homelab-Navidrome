@@ -3,7 +3,7 @@ Self-hosted music server using Navidrome on Docker in a Proxmox LXC container wi
 
 > Self-hosted music streaming server with secure remote access, deployed on Proxmox VE with Docker in an LXC container.
 
-![Status](https://img.shields.io/badge/Status-Incomplete-red)
+![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-blue)
 ![Last Updated](https://img.shields.io/badge/Last%20Updated-Mar%202026-orange)
 ---
@@ -243,4 +243,3 @@ Advanced Settings → Inbound Rules → New Rule → Port → TCP/Specific local
 ```
 
 
-# END
