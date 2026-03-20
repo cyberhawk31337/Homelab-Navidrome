@@ -84,6 +84,15 @@ Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
 Components: stable
 Signed-By: /etc/apt/keyrings/docker.asc
 EOF
+```
+**Installed Docker Packages**
+```bash
+ sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+#verify
+ sudo docker run hello-world
+```
+**Run Navidrome**
+```bash
 # Run Navidrome
 docker run -d \
   --name navidrome \
@@ -92,12 +101,6 @@ docker run -d \
   -v navidrome-data:/data \
   --restart unless-stopped \
   deluan/navidrome:latest
-```
-**Installed Docker Packages**
-```bash
- sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-#verify
- sudo docker run hello-world
 ```
 ### 3. File Sharing & Permissions (Samba)
 - Configured Samba on Proxmox host for file transfers from Windows PC
@@ -136,8 +139,26 @@ netfilter-persistent save
 #Active ip/port forwarding
  sysctl net.ipv4.ip_forward=1
 ```
+### 5. Access Navidrome
+- Find your container's IP address
+- Open browser and navigate to the Navidrome web interface
+- Create admin account on first login
+```bash
+# LXC Console - Get container IP
+hostname -I
 
+# Or check running containers
+docker ps
+```
+**First Login**
+Access URL: http://[container-ip]:4533
+- Create admin account with username/password
+- Music library will auto-populate from /music bind mount
+- Navidrome navigate to settings → Users to add regular non-admin user(s)
+- Music is now listeneable and accessible via phone download appropiate app for proper OS device using Container IP and Navidrome profile login to access.
 
+## 🚧 Challenges and Troubleshooting
+### Challenge 1: Container Network Isolation
 
 
 
