@@ -159,7 +159,22 @@ Access URL: http://[container-ip]:4533
 
 ## 🚧 Challenges and Troubleshooting
 ### Challenge 1: Container Network Isolation
+| Aspect | Details |
+| :--- | :--- |
+| **Issue** | Tailscale installed on Proxmox host, but services inside LXC container were unreachable via Tailscale IP |
+| **Investigation** | Verified host and container reside in different network namespaces. Local `curl` tests confirmed container was listening, but external traffic was blocked |
+| **Solution** | Implemented `iptables` DNAT rules to forward incoming traffic on port 4533 from host to container's internal IP |
+| **Lesson Learned** | Understanding network namespaces is critical when deploying services in virtualized environments; external access requires explicit port forwarding rules |
 
+```bash
+# Proxmox Shell - Port forwarding
+iptables -t nat -A PREROUTING -p tcp --dport 4533 -j DNAT --to-destination 192.168.137.3:4533
+iptables -A FORWARD -p tcp -d 192.168.137.3 --dport 4533 -j ACCEPT
+
+# Save rules
+apt install -y iptables-persistent
+netfilter-persistent save
+```
 
 
 
