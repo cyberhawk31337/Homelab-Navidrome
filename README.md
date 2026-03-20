@@ -97,8 +97,14 @@ sudo apt update
 #verify
  sudo docker run hello-world
 ```
-
-
+### 3. File Sharing & Permissions (Samba)
+- Configured Samba on Proxmox host for file transfers from Windows PC
+- Resolved permission errors by aligning Linux filesystem ownership with Samba User
+```bash
+# Proxmox Shell - Set ownership
+chown -R sambauser:sambauser /mnt/music
+chmod -R 755 /mnt/music
+```
 
 
 
