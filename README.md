@@ -66,7 +66,7 @@ nano /etc/pve/lxc/100.conf
 # Add: mp0: /mnt/music,mp=/music
 ```
 ### 2. Container Orchestration (Docker)
-- Installed Docker Engine
+- Installed Docker Engine - https://docs.docker.com/engine/install/debian/
 - Deployed deluan/navidrome container with port mapping and volume binding
 
 **Set up Docker apt Repository**
@@ -87,7 +87,6 @@ Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
 Components: stable
 Signed-By: /etc/apt/keyrings/docker.asc
 EOF
-sudo apt update
 ```
 
 **Installed Docker Packages**
@@ -101,10 +100,104 @@ sudo apt update
 - Configured Samba on Proxmox host for file transfers from Windows PC
 - Resolved permission errors by aligning Linux filesystem ownership with Samba User
 ```bash
-# Proxmox Shell - Set ownership
-chown -R sambauser:sambauser /mnt/music
+# Proxmox Shell - Install Samba
+apt update && apt install -y samba samba-common-bin
+
+# Create Samba user
+adduser navidromeuser
+smbpasswd -a navidromeuser
+
+# Configure Samba share
+nano /etc/samba/smb.conf
+# Add: [music] path = /mnt/music browseable = yes read only = no valid users = navidromeuser
+
+# Set ownership
+chown -R navidromeuser:navidromeuser /mnt/music
 chmod -R 755 /mnt/music
+
+# Restart Samba
+systemctl restart smbd
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
