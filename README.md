@@ -91,7 +91,7 @@ EOF
 #verify
  sudo docker run hello-world
 ```
-**Run Navidrome**
+**Run Navidrome** - https://www.navidrome.org/docs/installation/docker/
 ```bash
 # Run Navidrome
 docker run -d \
