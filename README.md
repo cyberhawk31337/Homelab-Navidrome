@@ -22,7 +22,17 @@ This is not just a tutorial— it's a troubleshooting log that documents the cha
 | **File Sharing** | Samba | Windows file transfer to host |
 | **Networking** | iptables | Port forwarding for container isolation |
 | **OS** | Debian 12 | LXC container base system |
----
+## 🖥️ Infrastructure
+
+This project runs on a custom Proxmox VE host that I provisioned from bare metal:
+
+- **Secure Decommissioning:** Performed secure wipe (ATA Sanitize) of Dell OptiPlex SSD via BIOS/UEFI before repurposing hardware
+- **Hypervisor Deployment:** Installed Proxmox VE via USB, configured for headless management with VT-d/VT-x virtualization passthrough
+- **Network Configuration:** Configured management interface (`vmbr0`) and established SSH access for remote administration
+- **Hardware Validation:** Confirmed compatibility (Intel i5-6500, 16GB DDR4) and tuned kernel parameters for container performance
+
+This foundation enabled the isolated LXC container environment for Navidrome, Docker, and subsequent security services.
+
 ## 🏗️ Architecture
 The data flow follows this path:
 ```mermaid
