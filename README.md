@@ -25,7 +25,6 @@ This is not just a tutorial— it's a troubleshooting log that documents the cha
 ---
 ## 🏗️ Architecture
 The data flow follows this path:
-
 ```mermaid
 graph TD
     A[Internet] -->|Tailscale Tunnel| B(Proxmox Host)
@@ -56,7 +55,6 @@ graph TD
 - Created a Debian 12 LXC container (`DockNavi`) with 3 vCPUs and 2GB RAM
 - Enabled **Nesting** in container features to allow Docker execution within LXC
 - Configured a **Bind Mount** (`mp0`) to map host directory `/mnt/music` to container path `/music`
-
 ```bash
 # Proxmox Shell - Create music directory
 mkdir -p /mnt/music
@@ -70,7 +68,6 @@ nano /etc/pve/lxc/100.conf
 - Deployed deluan/navidrome container with port mapping and volume binding
 
 **Set up Docker apt Repository**
-
 ```bash
 # Add Docker's official GPG key:
 sudo apt update
@@ -87,10 +84,16 @@ Suites: $(. /etc/os-release && echo "$VERSION_CODENAME")
 Components: stable
 Signed-By: /etc/apt/keyrings/docker.asc
 EOF
+# Run Navidrome
+docker run -d \
+  --name navidrome \
+  -p 4533:4533 \
+  -v /music:/music \
+  -v navidrome-data:/data \
+  --restart unless-stopped \
+  deluan/navidrome:latest
 ```
-
 **Installed Docker Packages**
-
 ```bash
  sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 #verify
@@ -118,8 +121,21 @@ chmod -R 755 /mnt/music
 # Restart Samba
 systemctl restart smbd
 ```
+### 4. Secure Remote Access (Tailscale)
+- Installed Tailscale on Proxmox host for encryptedc mesh network
+- Configured iptables NAT port forwarding to bridge host and container
+```bash
+# Proxmox Shell - Port forwarding
+iptables -t nat -A PREROUTING -p tcp --dport 4533 -j DNAT --to-destination 192.168.137.3:4533
+iptables -A FORWARD -p tcp -d 192.168.137.3 --dport 4533 -j ACCEPT
 
+# Save rules
+apt install -y iptables-persistent
+netfilter-persistent save
 
+#Active ip/port forwarding
+ sysctl net.ipv4.ip_forward=1
+```
 
 
 
