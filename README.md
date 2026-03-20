@@ -242,4 +242,3 @@ Created an inbound firewall rule via Windows Defender Firewall app to allow TCP 
 Advanced Settings → Inbound Rules → New Rule → Port → TCP/Specific local ports: 4533 → Allow connection: Domain, Private, Public → Navidrome/port forwarding 4533 to access navidrome via tailscale → Finish
 ```
 
-
