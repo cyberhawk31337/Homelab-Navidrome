@@ -165,7 +165,6 @@ Access URL: http://[container-ip]:4533
 | **Investigation** | Verified host and container reside in different network namespaces. Local `curl` tests confirmed container was listening, but external traffic was blocked |
 | **Solution** | Implemented `iptables` DNAT rules to forward incoming traffic on port 4533 from host to container's internal IP |
 | **Lesson Learned** | Understanding network namespaces is critical when deploying services in virtualized environments; external access requires explicit port forwarding rules |
-
 ```bash
 # Proxmox Shell - Port forwarding
 iptables -t nat -A PREROUTING -p tcp --dport 4533 -j DNAT --to-destination 192.168.137.3:4533
@@ -175,103 +174,73 @@ iptables -A FORWARD -p tcp -d 192.168.137.3 --dport 4533 -j ACCEPT
 apt install -y iptables-persistent
 netfilter-persistent save
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+### Challenge 2: Samba Permission Mismatch
+
+| Aspect | Details |
+| :--- | :--- |
+| **Issue** | Successfully authenticated to Samba share but received "Permission Denied" when attempting to write files |
+| **Investigation** | Discovered underlying Linux directory /mnt/music was owned by root, not Samba user |
+| **Solution** | Executed chown -R navidromeuser:navidromeuser /mnt/music to align filesystem ownership |
+| **Lesson Learned** | Authentication (Samba) and Authorization (Linux Filesystem) are distinct layers; successful login does not guarantee write access without proper file permissions |
+```bash
+# Proxmox Shell - Set ownership
+chown -R navidromeuser:navidromeuser /mnt/music
+chmod -R 755 /mnt/music
+
+# Verify ownership
+ls -la /mnt/
+```
+### Challenge 3: Tailscale Installation Failures
+
+| Aspect | Details |
+| :--- | :--- |
+| **Issue** | Tailscale install script failed with 401 Unauthorized errors from Proxmox enterprise repositories |
+| **Investigation** | Proxmox enterprise repos require paid subscription key; apt-get update failed before Tailscale package could install |
+| **Solution** | Downloaded .deb package directly and installed with dpkg -i |
+| **Lesson Learned** | Repository authentication issues can block package installation; direct .deb download bypasses repo dependencies |
+```bash
+# Proxmox Shell - Download and install Tailscale directly
+curl -fsSL https://pkgs.tailscale.com/stable/debian/bookworm/tailscale_1.60.0_amd64.deb -o tailscale.deb
+dpkg -i tailscale.deb
+apt-get install -f -y
+rm tailscale.deb
+```
+### Challenge 4: Tailscale Installation Failures
+
+| Aspect | Details |
+| :--- | :--- |
+| **Issue** | Docker installation script failed with "unsupported file" errors in /etc/apt/keyrings |
+| **Investigation** | Unprivileged LXC containers have restricted write access to certain system directories |
+| **Solution** | Used mkdir with explicit permissions instead of install command; verified directory writability before proceeding |
+| **Lesson Learned** | Unprivileged containers require careful permission management; standard installation scripts may need adaptation |
+```bash
+# LXC Console - Force create directory
+mkdir -p /etc/apt/keyrings
+chmod 755 /etc/apt/keyrings
+
+# Verify directory is writable
+ls -ld /etc/apt/keyrings
+```
+### Challenge 5: Port Forwarding & Firewall Blocking
+
+| Aspect | Details |
+| :--- | :--- |
+| **Issue** | Mobile clients could not connect to Navidrome despite Tailscale showing "Connected". Initial hypothesis pointed to Tailscale relay latency, but the root cause was deeper. |
+| **Investigation** | 1. Verified Tailscale status showed "Relayed" but ping worked.<br>2. Tested local connectivity (`curl`) which succeeded, proving the container was running.<br>3. Discovered that while Tailscale traffic reached the Proxmox host, the host firewall (Windows Firewall on the gateway PC) and LXC network isolation were dropping the packets on port 4533. |
+| **Solution** | **1. Proxmox Side:** Configured `iptables` NAT port forwarding to bridge the host IP to the LXC container IP.<br>**2. Windows Side:** Created an inbound firewall rule on the PC (acting as the gateway) to allow TCP port 4533 through the Ethernet interface. |
+| **Lesson Learned** | In a double-NAT topology (PC sharing internet), traffic must traverse **two** firewalls: the host OS firewall and the container network isolation. Successful remote access requires explicit port forwarding rules on the hypervisor AND allow-listing on the upstream gateway. |
+
+```bash
+# Proxmox Shell - Port forwarding (Host to Container)
+iptables -t nat -A PREROUTING -p tcp --dport 4533 -j DNAT --to-destination 192.168.137.3:4533
+iptables -A FORWARD -p tcp -d 192.168.137.3 --dport 4533 -j ACCEPT
+
+# Windows PowerShell (Run as Admin) - Allow port 4533
+New-NetFirewallRule -DisplayName "Navidrome Port 4533" -Direction Inbound -Protocol TCP -LocalPort 4533 -Action Allow
+# Alternative: Windows Defender Firewall GUI (which I used)
+Created an inbound firewall rule via Windows Defender Firewall app to allow TCP port 4533 through the Ethernet interface.
+Advanced Settings → Inbound Rules → New Rule → Port → TCP/Specific local ports: 4533 → Allow connection: Domain, Private, Public → Navidrome/port forwarding 4533 to access navidrome via tailscale → Finish
+```
+
+
+# END
